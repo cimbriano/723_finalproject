@@ -1,3 +1,10 @@
+# LaTeX
+*.aux
+*.log
+*.pdf
+*.synctex.gz
+
+# Python
 *.py[co]
 
 # Packages
