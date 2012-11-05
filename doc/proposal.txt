@@ -1,0 +1,16 @@
+Siri, do you understand the words that are comin' outta my mouth?
+Friday, November 2, 2012
+
+1 Problem
+	Voice control and command recognition is a popular new feature of smartphones. Apple's Siri and Google's Search App are two examples of systems that take voice commands form users and performs actions like searching the web, creating calendar events, or sending message. Users had been reporting that these systems have been having trouble understanding them, especially those with British or Southern American accents. Improvements in accent understanding could help systems like these better recognize users with variations in their speech, as well as improve the localization of the voice the system produces.
+
+2 Data Sources
+	1. CMU Pronunciation Dictionary http://www.speech.cs.cmu.edu/cgi-bin/cmudict
+	"A machine-readable pronunciation dictionary for North American English that contains over 125,000 words and their transcriptions."
+	2. Oxford English Dictionary http://public.oed.com/subscriber-services/sru-service
+	They have a subscriber service which could be used to compile a corpus of words and their British-English pronunciation.
+	3. Speech Accent Archive http://accent.gmu.edu
+	"The speech accent archive uniformly presents a large set of speech samples from a variety of language backgrounds. Native and non-native speakers of English read the same paragraph and are carefully transcribed."
+
+3 Approach
+	Using the above datasets, or others to be found, we'd like to produce a probabilistic model of phoneme trans- lations from one dialect to another. Using this model, and given a word in some dialect of English, say North American English, we'd like to predict the phonetic translation of that word into another English dialect, say British-English or Southern American English.
