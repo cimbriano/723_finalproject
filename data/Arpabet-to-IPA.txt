@@ -20,50 +20,50 @@ OW 		oʊ		o&#650;
 AW 		aʊ 		a&#650;
 OY 		ɔɪ 		&#596;&#618;
 
-ER 	ɝ 
-AXR ɚ 
-EH R ɛr
-UH R ʊr
-AO R ɔr
-AA R ɑr
-IH R ɑr
-IY R ɪr
-AW R aʊr
+ER 		ɝ 		&#605;
+AXR 	ɚ 		&#602;
+EH R 	ɛr 		&#603;r
+UH R 	ʊr		&#650;r
+AO R 	ɔr 		&#596;r
+AA R 	ɑr 		&#593;r
+IH R 	ɪr  	&#618;r 		
+IY R 	ɪr 		&#618;r
+AW R 	aʊr 	a&#650;r
 
 
-P p
-B b
-T t
-D d
-K k
-G ɡ
+P 		p 		p
+B 		b 		b
+T 		t 		t
+D 		d 		d
+K 		k 		k
+G 		ɡ 		&#609;
 
-CH tʃ
-JH dʒ
+CH 		tʃ 		t&#643;
+JH 		dʒ 		
 
-F f
-V v
-TH θ
-DH ð
-S s
-Z z
-SH ʃ
-ZH ʒ
-HH h
+F 		f 		f
+V 		v 		v
+TH 		θ 		&#952;
+DH 		ð 		&#240;
+S 		s 		s
+Z 		z 		z
+SH		ʃ 		&#643;
+ZH 		ʒ 		&#658;
+HH		h 		h
 
-M 	m
-EM 	m
-N 	n
-EN 	n
-NG 	ŋ
-ENG ŋ̍ 	Washington (W AO1 SH ENG T EN)
+M 		m 		m
+EM 		m̩ 		m&#809;
+N 		n 		n
+EN 		n̩ 		n&#809;
+NG 		ŋ 		&#331;
+ENG 	ŋ̍ 		&#331;&#781;
 
-L 	ɫ
-EL 	ɫ
-R 	r
-DX 	ɾ
-NX 	ɾ̃
+L 		ɫ 		&#619;
+EL 		ɫ̩ 		&#619;&#809;
+R 		ɹ 	 	&#633;
+DX 		ɾ 		&#638;
+NX 		ɾ̃ 		&#638;&#771;
 
-Y 	j
-W 	w
-Q 	ʔ
+Y 		j 		j
+W 		w 		w
+Q 		ʔ		&#660;
