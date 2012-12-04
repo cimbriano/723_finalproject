@@ -1,7 +1,3 @@
-Arpabet to IPA
-
-ARPA 	IPA		UNICODE
-
 AO 		ɔ 		&#596;
 AA 		ɑ 		&#593;
 IY 		i 		i		
@@ -13,13 +9,11 @@ AH(AH1)	ʌ 		&#652;
 AH(AH0) ə		&#601;
 AX(AX0)	ə 		&#601;
 AE 		æ		&#230;
-		
 EY 		eɪ		e&#618;
 AY 		aɪ		a&#618;
 OW 		oʊ		o&#650;
 AW 		aʊ 		a&#650;
 OY 		ɔɪ 		&#596;&#618;
-
 ER 		ɝ 		&#605;
 AXR 	ɚ 		&#602;
 EH R 	ɛr 		&#603;r
@@ -29,18 +23,14 @@ AA R 	ɑr 		&#593;r
 IH R 	ɪr  	&#618;r 		
 IY R 	ɪr 		&#618;r
 AW R 	aʊr 	a&#650;r
-
-
 P 		p 		p
 B 		b 		b
 T 		t 		t
 D 		d 		d
 K 		k 		k
 G 		ɡ 		&#609;
-
 CH 		tʃ 		t&#643;
-JH 		dʒ 		
-
+JH 		dʒ 		d&#658;
 F 		f 		f
 V 		v 		v
 TH 		θ 		&#952;
@@ -50,20 +40,17 @@ Z 		z 		z
 SH		ʃ 		&#643;
 ZH 		ʒ 		&#658;
 HH		h 		h
-
 M 		m 		m
 EM 		m̩ 		m&#809;
 N 		n 		n
 EN 		n̩ 		n&#809;
 NG 		ŋ 		&#331;
 ENG 	ŋ̍ 		&#331;&#781;
-
 L 		ɫ 		&#619;
 EL 		ɫ̩ 		&#619;&#809;
 R 		ɹ 	 	&#633;
 DX 		ɾ 		&#638;
 NX 		ɾ̃ 		&#638;&#771;
-
 Y 		j 		j
 W 		w 		w
 Q 		ʔ		&#660;
