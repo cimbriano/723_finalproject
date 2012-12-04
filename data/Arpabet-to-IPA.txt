@@ -1,0 +1,69 @@
+Arpabet to IPA
+
+ARPA 	IPA		UNICODE
+
+AO 		ɔ 		&#596;
+AA 		ɑ 		&#593;
+IY 		i 		i		
+UW 		u 		u
+EH 		ɛ 		&#603;
+IH 		ɪ 		&#618;
+UH 		ʊ 		&#650;
+AH(AH1)	ʌ 		&#652;
+AH(AH0) ə		&#601;
+AX(AX0)	ə 		&#601;
+AE 		æ		&#230;
+		
+EY 		eɪ		e&#618;
+AY 		aɪ		a&#618;
+OW 		oʊ		o&#650;
+AW 		aʊ 		a&#650;
+OY 		ɔɪ 		&#596;&#618;
+
+ER 	ɝ 
+AXR ɚ 
+EH R ɛr
+UH R ʊr
+AO R ɔr
+AA R ɑr
+IH R ɑr
+IY R ɪr
+AW R aʊr
+
+
+P p
+B b
+T t
+D d
+K k
+G ɡ
+
+CH tʃ
+JH dʒ
+
+F f
+V v
+TH θ
+DH ð
+S s
+Z z
+SH ʃ
+ZH ʒ
+HH h
+
+M 	m
+EM 	m
+N 	n
+EN 	n
+NG 	ŋ
+ENG ŋ̍ 	Washington (W AO1 SH ENG T EN)
+
+L 	ɫ
+EL 	ɫ
+R 	r
+DX 	ɾ
+NX 	ɾ̃
+
+Y 	j
+W 	w
+Q 	ʔ
