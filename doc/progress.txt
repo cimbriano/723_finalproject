@@ -1,0 +1,47 @@
+723 Final Project Progress Report
+12/3/2012
+Chris Imbriano and David Wasser
+
+Using Phonetic Transcription Datasets to Distinguish British and American English
+
+
+	We spent a good deal of time researching potential data sources and refining the scope direction of the project to address the feedback that the proposal was vague.
+
+
+	Obtaining British English Datasets
+
+	David spoke with a professor of his and received a British dictionary in CD form. We thought we might be able to extract the phonetic transcriptions from this source, but the proprietary nature of the data format seems to preclude this, at least without more exploring which we are unwilling to invest in given other options.
+
+	Chris spent some time with the Oxford English Dictionary and their subscriber services.  We are considering crawling (in a friendly way) the entries of this dictionary to extract transcriptions. 
+
+	If crawling the OED turns out to be problematic, we will resort to finding transcribed text and extracting words for which we have an American transcription.
+
+
+	Obtaining American English Datasets
+
+	The Carnegie Mellon Dictionary has about 125,000 words and their phonetic transcriptions. One issue with this data source is that the phonetic transcription uses the ARPABET. We have compiled a table of conversions between the ARPABET phonemes the IPA characters, and their Unicode representation.
+
+
+	Complications
+
+	Stress indicators.
+
+	ARPABET uses 0,1,2 to indicate stress. IPA uses "high" or "low" ticks. We'll need to properly covert between the ARPABET representation and the IPA, or perhaps not use them at all. 
+
+	IPA is usually represented with Unicode characters, which can sometimes be hard to work with since those characters may not be easily printed (without correct fonts, etc.)
+
+
+	Method
+
+	Using a corpus of words for which we have both the American and British phonetic transcription, we will build a Probabilistic Finite State Acceptor.  We will build a language model over phonemes since we will assume phonetic transcriptions are our input data. Once we have these two language models, one for each dialect, we can feed it phonetic transcriptions and receive a probability of that transcription in each of British and American English. The distinguisher will produce a judgment based on the more probable dialect.
+
+
+	Evaluation
+
+	The Speech Accent Archive, produced by researchers at George Mason University, it a large data set of speakers of various languages speaking a sentence as well as the phonetic transcription of their speech. Included in the set of speakers are individuals from USA and the UK. We will use these two subsets as ground truth. So given the transcribed speech of speakers in those sets, we expect that our distinguisher should correctly identify each speaker's native dialect. Evaluation will then be a percentage of speakers correctly identified.
+
+	It could also be interesting to try our distinguisher on speakers of other dialect, even though we've only trained on American and British, to see where other dialects fall in some hypothetical British-American spectrum.
+
+	Infrastructure
+
+	We plan to use some of the infrastructure from Project 1, specifically the Carmel library for FSM creation.
