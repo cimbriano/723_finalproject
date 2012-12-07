@@ -1,4 +1,83 @@
+#!/usr/bin/ruby
+
+
+
 # For each of the speech accent archive files
+
+usa_files = []
+uk_files = []
+
+# Collect usa filenames
+File.open("data/speech_accent_archive/AmericanEnglish", "r") do |infile|
+    while (line = infile.gets)
+        usa_files << line.split[0] + '.rtf'
+    end
+end
+
+# Collect uk filenames
+File.open("data/speech_accent_archive/BritishEnglish", "r") do |infile|
+    while (line = infile.gets)
+        uk_files << line.split[0] + '.rtf'
+    end
+end
+
+
+outfile = File.new('data/test/usa_uk.txt', 'w')
+
+usa_files.each do |filename|
+	begin
+
+		# Transcription is on one line between brackets
+
+
+		file = File.new("data/speech_accent_archive/transcription_txts/#{filename}", "r")
+		while (line = file.gets)
+
+			transcription = line[ /\[(.*)\]/ ]
+
+			if transcription
+				outfile.puts "usa #{transcription}"
+				break
+			end
+		end
+		file.close
+
+	rescue => err
+		# Maybe file starts with
+		puts "Exception: #{err}"
+		err
+	end
+end
+
+uk_files.each do |filename|
+	begin
+
+		# Transcription is on one line between brackets
+
+
+		file = File.new("data/speech_accent_archive/transcription_txts/#{filename}", "r")
+		while (line = file.gets)
+
+			transcription = line[ /\[(.*)\]/ ]
+
+			if transcription
+				outfile.puts "uk #{transcription}"
+				break
+			end
+		end
+		file.close
+
+	rescue => err
+		# Maybe file starts with
+		puts "Exception: #{err}"
+		err
+	end
+end
+
+
+
+outfile.close
+
 
 # get the pattern at the beginning of the line
 	# eg. english32
