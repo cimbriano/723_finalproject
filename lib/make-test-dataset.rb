@@ -36,7 +36,7 @@ usa_files.each do |filename|
 			transcription = line[ /\[(.*)\]/ ]
 
 			if transcription
-				outfile.puts "usa^#{transcription[1...-1]}"
+				outfile.puts "usa^#{filename}^#{transcription[1...-1]}"
 				break
 			end
 		end
@@ -61,7 +61,7 @@ uk_files.each do |filename|
 			transcription = line[ /\[(.*)\]/ ]
 
 			if transcription
-				outfile.puts "uk^#{transcription[1...-1]}"
+				outfile.puts "uk^#{filename}^#{transcription[1...-1]}"
 				break
 			end
 		end
