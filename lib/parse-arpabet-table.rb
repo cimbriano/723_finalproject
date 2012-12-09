@@ -1,18 +1,27 @@
 #!/usr/bin/ruby
 
-dict = {}
+arpa_to_ipa = {}
+ipa_to_arpa = {}
+
+
 
 counter = 1
 begin
 	file = File.new("data/Arpabet-to-IPA.txt", "r")
 	while (line = file.gets)
-		arpa, ipa, unicode = line.split
+		arpa, ipa, unicode = line.split(',')
+
+		arpa.chomp!
+		ipa.chomp!
+		unicode.chomp!
 
 		print "arpa: #{arpa}  "
 		print "ipa: #{ipa}  "
 		print "unicode: #{unicode}"
 		puts 
-		dict[arpa] = [ipa, unicode]
+		arpa_to_ipa[arpa] = [ipa, unicode]
+		ipa_to_arpa[ipa] = arpa
+		
 
 	end
 	file.close
@@ -23,6 +32,9 @@ end
 
 puts 
 puts "Dictionary"
-dict.each do |ele|
-	puts "#{ele}: #{dict[ele]}"
+arpa_to_ipa.each do |ele|
+	puts "#{ele}: #{arpa_to_ipa[ele]}"
 end
+
+# Make reverse table (# to character)
+
