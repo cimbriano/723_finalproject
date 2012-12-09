@@ -10,8 +10,9 @@ text = text.split
 
 # unicode_pattern = /\\u\w{0,4}/
 
-match = []
-mismatch = []
+us_match = []
+uk_match = []
+
 
 # Collect usa filenames
 File.open("data/test/usa_uk.txt", "r") do |infile|
@@ -29,18 +30,25 @@ File.open("data/test/usa_uk.txt", "r") do |infile|
 		words.map! { |e| e[0] }
 		puts "words.length - text.length: #{words.length - text.length}"
 		if words.length - text.length == 0
-			match << filename
-		else
-			mismatch << filename
+			if location == "usa"
+				us_match << filename
+			elsif location == "uk"
+				uk_match << filename
+			else
+				puts "Matched but wrong location: #{location}"
+			end
 		end				
 	end
 
 end
 
-puts "Matching: #{match}"
+puts "Number of US matching: #{us_match.length}"
+puts "US Matching: #{us_match}. "
 
-puts
-puts "Not matching: #{mismatch}"
+puts "Number of UK matching: #{uk_match.length}"
+puts "UK Matching: #{uk_match}"
+
+
 
 
 
