@@ -28,6 +28,7 @@ File.open("data/test/usa_uk.txt", "r") do |infile|
 		words = transcription.scan(/(([a-z]|\\u\w{0,4}|\\u\w{0,4} )*([a-z]|\\u\w{0,4} )( |\Z))/)
 		# puts "Words Array"
 		words.map! { |e| e[0] }
+		puts words
 		puts "words.length - text.length: #{words.length - text.length}"
 		if words.length - text.length == 0
 			if location == "usa"
