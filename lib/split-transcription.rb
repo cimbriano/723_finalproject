@@ -39,9 +39,13 @@ File.open("data/test/usa_uk.txt", "r") do |infile|
 				puts "Matched but wrong location: #{location}"
 			end
 		end				
+
+		break
 	end
 
 end
+
+puts words
 
 puts "Number of US matching: #{us_match.length}"
 puts "US Matching: #{us_match}. "

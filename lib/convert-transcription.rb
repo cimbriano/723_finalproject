@@ -17,26 +17,26 @@ def convert(string)
 	unicode = false
 	uni_string = ""
 
-	puts "Starting each char..."
+	# puts "Starting each char..."
 	string.each_char do |char|
 		
-		puts "char: #{char}"
+		# puts "char: #{char}"
 
 		if char != "\\" and !unicode
-			puts "Adding #{char} to word"
+			# puts "Adding #{char} to word"
 			word += convert_char(char)
 
 		elsif char == "\\"
-			puts "Starting unicode string"
+			# puts "Starting unicode string"
 			uni_string = "\\"
 			unicode = true
 
 		elsif char != " " and unicode
-			puts "Putting #{char} in unicode string: #{uni_string}"
+			# puts "Putting #{char} in unicode string: #{uni_string}"
 			uni_string += char
 
 		elsif unicode and char == " "
-			puts "Found end of unicode string: #{uni_string}"
+			# puts "Found end of unicode string: #{uni_string}"
 			word += convert_char(uni_string)
 			uni_string = ""
 			unicode = false
@@ -55,11 +55,11 @@ def convert_char(char)
 		return char
 	else
 		# Unicode decimal
-		puts "char: #{char}"
+		# puts "char: #{char}"
 		unicode_decimal = char[2,char.length]
-		puts "decimal: #{unicode_decimal}"
+		# puts "decimal: #{unicode_decimal}"
 		hex_string = "%.4x" % unicode_decimal
-		puts "hex_string: #{hex_string} is string?: #{hex_string.class}"
+		# puts "hex_string: #{hex_string} is string?: #{hex_string.class}"
 		return [hex_string.hex].pack("U")
 	end
 		
