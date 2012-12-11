@@ -10,30 +10,43 @@ transcribed_word = "p\\u688 \\u616 iz"
 # => return string of unicode characters
 
 def convert(string)
+	# Adding space to handle words that end in a unicode character
+	string += " "
+
 	word = ""
 	unicode = false
 	uni_string = ""
 
+	puts "Starting each char..."
 	string.each_char do |char|
 		
-		if char != "\\" and !unicode
-			word += convert(char)
-		elsif char == "\\"
+		puts "char: #{char}"
 
+		if char != "\\" and !unicode
+			puts "Adding #{char} to word"
+			word += convert_char(char)
+
+		elsif char == "\\"
+			puts "Starting unicode string"
+			uni_string = "\\"
 			unicode = true
 
-		elsif char != " "
+		elsif char != " " and unicode
+			puts "Putting #{char} in unicode string: #{uni_string}"
 			uni_string += char
 
 		elsif unicode and char == " "
+			puts "Found end of unicode string: #{uni_string}"
 			word += convert_char(uni_string)
 			uni_string = ""
 			unicode = false
+		else
+			puts "Not sure what to do with #{char}"
 		end
-
 	end
 
-	return word
+	# Strip to remove extra spaces
+	return word.strip
 
 end
 
