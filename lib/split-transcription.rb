@@ -60,4 +60,4 @@ def split(trans)
 	words.map! { |e| e[0] }
 end
 
-puts split(raw)
+# puts split(raw)

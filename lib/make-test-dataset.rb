@@ -12,32 +12,42 @@ require './lib/convert-transcription'
 # => with the paragraph in terms of number of words/utterances 
 # => (ie, no alignment fixing required)
 
-usa_files = ["english18.rtf", "english23.rtf", "english39.rtf", "english44.rtf", "english46.rtf", "english47.rtf", "english49.rtf", "english50.rtf", "english51.rtf", "english53.rtf", "english55.rtf", "english59.rtf", "english60.rtf", "english62.rtf", "english63.rtf", "english65.rtf", "english67.rtf", "english68.rtf", "english70.rtf", "english71.rtf", "english74.rtf", "english75.rtf", "english76.rtf", "english78.rtf", "english81.rtf", "english82.rtf", "english86.rtf", "english88.rtf", "english90.rtf", "english92.rtf", "english93.rtf", "english95.rtf", "english96.rtf", "english97.rtf", "english98.rtf", "english100.rtf", "english102.rtf", "english103.rtf", "english104.rtf", "english106.rtf", "english107.rtf", "english109.rtf", "english117.rtf", "english118.rtf", "english121.rtf", "english123.rtf", "english124.rtf", "english126.rtf", "english128.rtf", "english131.rtf", "english135.rtf", "english137.rtf", "english138.rtf", "english142.rtf", "english146.rtf", "english147.rtf", "english149.rtf", "english150.rtf", "english151.rtf", "english155.rtf", "english157.rtf", "english158.rtf", "english160.rtf", "english162.rtf", "english163.rtf", "english165.rtf", "english166.rtf", "english167.rtf", "english168.rtf", "english169.rtf", "english170.rtf", "english171.rtf", "english173.rtf", "english177.rtf", "english179.rtf", "english180.rtf", "english181.rtf"]
-uk_files = ["english24.rtf", "english40.rtf", "english56.rtf", "english57.rtf", "english58.rtf", "english80.rtf", "english85.rtf", "english113.rtf", "english134.rtf"]
+length_matching = ["english18", "english23", "english39", "english44", "english46", "english47", "english49", "english50", "english51", "english53", "english55", "english59", "english60", "english62", "english63", "english65", "english67", "english68", "english70", "english71", "english74", "english75", "english76", "english78", "english81", "english82", "english86", "english88", "english90", "english92", "english93", "english95", "english96", "english97", "english98", "english100", "english102", "english103", "english104", "english106", "english107", "english109", "english117", "english118", "english121", "english123", "english124", "english126", "english128", "english131", "english135", "english137", "english138", "english142", "english146", "english147", "english149", "english150", "english151", "english155", "english157", "english158", "english160", "english162", "english163", "english165", "english166", "english167", "english168", "english169", "english170", "english171", "english173", "english177", "english179", "english180", "english181", "english24", "english40", "english56", "english57", "english58", "english80", "english85", "english113", "english134"]
+# uk_files = ["english24", "english40", "english56", "english57", "english58", "english80", "english85", "english113", "english134"]
 
 usa_uk_trans_file = File.new('data/test/usa_uk.txt', 'w')
 other_trans_file = File.new('data/test/other.txt' ,'w')
 
 rel_path = "data/speech_accent_archive/filename_lists"
 Dir.foreach(rel_path) { |filename| 
-	puts "Found file: #{filename} in #{rel_path}"
+	# puts "Found file: #{filename} in #{rel_path}"
 
 	if filename.end_with?("English")
-		puts "About to open: #{rel_path}/#{filename}"
+		# puts "About to open: #{rel_path}/#{filename}"
 
 		File.open("#{rel_path}/#{filename}") do |infile|
 			while( line = infile.gets)
 				transcription_filename_base, gender, location, country = line.split('^').map { |e| e.strip }
 				transcription = ""
+				puts "country: '#{country}'"
+				puts "filename: #{transcription_filename_base}"
+
+
+				if country == "uk" or country == "usa"
+					puts "country: '#{country}'"
+
+					break if not length_matching.include?(transcription_filename_base)
+				end
+
 
 				begin
 
 					transcription_file = File.new("data/speech_accent_archive/transcription_txts/#{transcription_filename_base}.rtf", "r")
-					puts "opened: data/speech_accent_archive/transcription_txts/#{transcription_filename_base}.rtf"
+					# puts "opened: data/speech_accent_archive/transcription_txts/#{transcription_filename_base}.rtf"
 					while (line = transcription_file.gets)
 						transcription = line[ /\[(.*)\]/ ]
 						if transcription
-							puts "Transcription found: #{transcription[0..20]} ... "
+							# puts "Transcription found: #{transcription[0..20]} ... "
 							break
 						end
 					end
@@ -48,26 +58,30 @@ Dir.foreach(rel_path) { |filename|
 						transcribed_word_list = split(transcription)
 						transcribed_word_list.map! {|word| convert(word) }
 
-						puts "Converted transcribed words: #{transcribed_word_list[0..10]} ..."
+						# puts "Converted transcribed words: #{transcribed_word_list[0..10]} ..."
 
-						puts "gender: #{gender}"
-						puts "country: '#{country}'"
-						puts "location: #{location}"
+						# puts "gender: #{gender}"
+						# puts "country: '#{country}'"
+						# puts "location: #{location}"
 
+						if transcribed_word_list.length != 69
+							puts transcribed_word_list.length
+							puts "LENGTH DID NOT MATCH: #{transcription_filename_base}. Country: #{country}"
+						end
 
 						case country
 						when "usa"
-							puts "USA"
+							# puts "USA"
 							usa_uk_trans_file.puts "usa^#{transcription_filename_base}^#{location}^#{gender}^#{transcribed_word_list}"
 						when "uk"
-							puts "UK"
+							# puts "UK"
 							usa_uk_trans_file.puts "uk^#{transcription_filename_base}^#{transcribed_word_list}"
 						else
-							puts "OTHER"
+							# puts "OTHER"
 							other_trans_file.puts "#{country}^#{transcription_filename_base}^#{transcribed_word_list}"
 						end
 					else
-						puts "No transcription found in: #{transcription_filename_base}"
+						# puts "No transcription found in: #{transcription_filename_base}"
 					end
 
 					
