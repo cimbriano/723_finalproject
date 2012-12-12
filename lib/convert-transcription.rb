@@ -1,4 +1,5 @@
-#!/usr/bin/ruby
+#!/bin/env ruby
+# encoding: UTF-8
 
 #Speech Accent Archive uses the unicode decimal numbers. 
 # "please"
