@@ -1,3 +1,6 @@
+# FSM temp files
+.tmp*
+
 # Sublime Text 2
 *.sublime-project
 *.sublime-workspace

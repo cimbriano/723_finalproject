@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 import FSM
 from util import *
 
@@ -10,9 +12,7 @@ def readData(filename):
     american = []
 
     for l in h.readlines():
-        print l
         a = l.split(':')
-        print a
         if len(a) == 1:
             words.append(a[0].strip())
             british.append(None)
@@ -30,93 +30,137 @@ def readData(filename):
 
 
 def evaluate(truth, hypothesis):
-    # I = 0
-    # T = 0
-    # H = 0
-    # for n in range(len(truth)):
-    #     t = truth[n].split('+')
-    #     allT = {}
-    #     cumSum = 0
-    #     for ti in t:
-    #         cumSum = cumSum + len(ti)
-    #         allT[cumSum] = 1
+    I = 0
+    T = 0
+    H = 0
+    for n in range(len(truth)):
+        t = truth[n].split('+')
+        allT = {}
+        cumSum = 0
+        for ti in t:
+            cumSum = cumSum + len(ti)
+            allT[cumSum] = 1
 
-    #     h = hypothesis[n].split('+')
-    #     allH = {}
-    #     cumSum = 0
-    #     for hi in h:
-    #         cumSum = cumSum + len(hi)
-    #         allH[cumSum] = 1
+        h = hypothesis[n].split('+')
+        allH = {}
+        cumSum = 0
+        for hi in h:
+            cumSum = cumSum + len(hi)
+            allH[cumSum] = 1
 
-    #     T = T + len(allT) - 1
-    #     H = H + len(allH) - 1
-    #     for i in allT.iterkeys():
-    #         if i in allH:
-    #             I = I + 1
-    #     I = I - 1
+        T = T + len(allT) - 1
+        H = H + len(allH) - 1
+        for i in allT.iterkeys():
+            if i in allH:
+                I = I + 1
+        I = I - 1
 
-    # Pre = 1.0
-    # Rec = 0.0
-    # Fsc = 0.0
-    # if I > 0:
-    #     Pre = float(I) / H
-    #     Rec = float(I) / T
-    #     Fsc = 2 * Pre * Rec / (Pre + Rec)
-    # return (Pre, Rec, Fsc)
-    return ""
+    Pre = 1.0
+    Rec = 0.0
+    Fsc = 0.0
+    if I > 0:
+        Pre = float(I) / H
+        Rec = float(I) / T
+        Fsc = 2 * Pre * Rec / (Pre + Rec)
+    return (Pre, Rec, Fsc)
 
 
 def bigramSourceModel(segmentations):
-    # # compute all bigrams
-    # lm = {}
-    # vocab = {}
-    # vocab['end'] = 1
-    # for s in segmentations:
-    #     prev = 'start'
-    #     for c in s:
-    #         if prev not in lm:
-    #             lm[prev] = Counter()
-    #         lm[prev][c] = lm[prev][c] + 1
-    #         prev = c
-    #         vocab[c] = 1
-    #     if prev not in lm:
-    #         lm[prev] = Counter()
-    #     lm[prev]['end'] = lm[prev]['end'] + 1
+    # compute all bigrams
+    lm = {}
+    vocab = {}
+    vocab['end'] = 1
+    for s in segmentations:
+        prev = 'start'
+        for c in s:
+            if prev not in lm:
+                lm[prev] = Counter()
+            lm[prev][c] = lm[prev][c] + 1
+            prev = c
+            vocab[c] = 1
+        if prev not in lm:
+            lm[prev] = Counter()
+        lm[prev]['end'] = lm[prev]['end'] + 1
 
-    # # smooth and normalize
-    # for prev in lm.iterkeys():
-    #     for c in vocab.iterkeys():
-    #         lm[prev][c] = lm[prev][c] + 0.5   # add 0.5 smoothing
-    #     lm[prev].normalize()
+    # smooth and normalize
+    for prev in lm.iterkeys():
+        for c in vocab.iterkeys():
+            lm[prev][c] = lm[prev][c] + 0.5   # add 0.5 smoothing
+        lm[prev].normalize()
 
-    # # convert to a FSA
-    # fsa = FSM.FSM(isProbabilistic=True)
-    # fsa.setInitialState('start')
-    # fsa.setFinalState('end')
+    print "Language Model keys"
+    print lm['b'].keys()
 
-    # # Character states in bigram model
-    # for char in lm['start']:
-    #     fsa.addEdge('start', char, char, lm['start'][char])
+    # convert to a FSA
+    fsa = FSM.FSM(isProbabilistic=True)
+    fsa.setInitialState('start')
+    fsa.setFinalState('end')
 
-    # # Transitions between character states or to 'end'
-    # for char in lm.keys():
-    #     if not char == 'start':
-    #         for second_char in lm[char]:
-    #             if second_char == 'end':
-    #                 fsa.addEdge(char, second_char, None, prob=lm[char][second_char])
-    #             else:
-    #                 fsa.addEdge(char, second_char, second_char, prob=lm[char][second_char])
+    # Character states in bigram model
+    for char in lm['start']:
+        fsa.addEdge('start', char, char, lm['start'][char])
 
-    # return fsa
-    return ""
+    # Transitions between character states or to 'end'
+    for char in lm.keys():
+        if not char == 'start':
+            for second_char in lm[char]:
+                if second_char == 'end':
+                    fsa.addEdge(char, second_char, None, prob=lm[char][second_char])
+                else:
+                    fsa.addEdge(char, second_char, second_char, prob=lm[char][second_char])
+
+    return fsa
 
 
 def runTest(trainFile='bengali.train', devFile='OEDResultsUniq.txt', source=bigramSourceModel):
     # def runTest(trainFile='bengali.train', devFile='OEDResultsUniq.txt', channel=stupidChannelModel, source=stupidSourceModel):
-    # (words, segs) = readData(trainFile)
+    path_to_data = "data/speech_accent_archive/"
+    (words, british, american) = readData(path_to_data + devFile)
+
+    print british
+
     # (wordsDev, segsDev) = readData(devFile)
     # fst = channel(words, segs)
-    # fsa = source(segs)
+    uk_fsa = source(british)
+    usa_fsa = source(american)
+
+    # uk_output = FSM.runFST([uk_fsa], british, quiet=False)
+    # usa_output = FSM.runFST([usa_fsa], american, quiet=False)
+
+    print "==== Trying British source model on strings 'meet' -> 'mit' ===="
+    output = FSM.runFST([uk_fsa], ["mit"])
+    print "==== Result: ", str(output), " ===="
+
+    print "==== Trying British source model on strings 'call' ===="
+    output = FSM.runFST([uk_fsa], ["call"])
+    print "==== Result: ", str(output), " ===="
+
+    print "==== Trying British source model on strings 'Stella' ===="
+    output = FSM.runFST([uk_fsa], ["stella"])
+    print "==== Result: ", str(output), " ===="
+
+    print "\n================================\n"
+
+    print "==== Trying American source model on strings 'please' ===="
+    output = FSM.runFST([usa_fsa], ["please"])
+    print "==== Result: ", str(output), " ===="
+
+    print "==== Trying American source model on strings 'call' ===="
+    output = FSM.runFST([usa_fsa], ["call"])
+    print "==== Result: ", str(output), " ===="
+
+    print "==== Trying American source model on strings 'Stella' ===="
+    output = FSM.runFST([usa_fsa], ["stella"])
+    print "==== Result: ", str(output), " ===="
+
+    preTrainOutput = FSM.runFST([uk_fsa], british, quiet=True)
+    for i in range(len(preTrainOutput)):
+        if len(preTrainOutput[i]) == 0:
+            preTrainOutput[i] = words[i]
+        else:
+            preTrainOutput[i] = preTrainOutput[i][0]
+    preTrainEval = evaluate(british, preTrainOutput)
+    print 'before training, P/R/F = ', str(preTrainEval)
 
     # preTrainOutput = runFST([fsa, fst], wordsDev, quiet=True)
     # for i in range(len(preTrainOutput)):
@@ -139,8 +183,7 @@ def runTest(trainFile='bengali.train', devFile='OEDResultsUniq.txt', source=bigr
     # print 'after  training, P/R/F = ', str(postTrainEval)
 
     # return postTrainOutput
-    path = "data/speech_accent_archive/"
-    return readData(path + devFile)
+    return
 
 
 def saveOutput(filename, output):
@@ -152,4 +195,4 @@ def saveOutput(filename, output):
 
 if __name__ == '__main__':
     output = runTest()
-    print output
+    # print output
