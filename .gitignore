@@ -12,6 +12,7 @@
 *.aux
 *.log
 *.synctex.gz
+doc/*.pdf
 
 # Python
 *.py[co]
