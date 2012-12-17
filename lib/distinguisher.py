@@ -112,55 +112,46 @@ def bigramSourceModel(segmentations):
     return fsa
 
 
-def runTest(trainFile='bengali.train', devFile='OEDResultsUniq.txt', source=bigramSourceModel):
+def runTest(trainFile='bengali.train', devFile='OEDResultsUniqClean.txt', source=bigramSourceModel):
     # def runTest(trainFile='bengali.train', devFile='OEDResultsUniq.txt', channel=stupidChannelModel, source=stupidSourceModel):
     path_to_data = "data/speech_accent_archive/"
     (words, british, american) = readData(path_to_data + devFile)
 
-    print british
-
     # (wordsDev, segsDev) = readData(devFile)
     # fst = channel(words, segs)
     uk_fsa = source(british)
-    usa_fsa = source(american)
+    # usa_fsa = source(american)
 
     # uk_output = FSM.runFST([uk_fsa], british, quiet=False)
     # usa_output = FSM.runFST([usa_fsa], american, quiet=False)
 
-    print "==== Trying British source model on strings 'meet' -> 'mit' ===="
-    output = FSM.runFST([uk_fsa], ["mit"])
+    print "==== Trying British source model on string 'meet' -> 'mi\xcb\x90t' ===="
+    output = FSM.runFST([uk_fsa], ["mi\xcb\x90t"])
     print "==== Result: ", str(output), " ===="
 
-    print "==== Trying British source model on strings 'call' ===="
-    output = FSM.runFST([uk_fsa], ["call"])
+    print "==== Trying British source model on string 'will' -> 'w\xc9\xaal' ===="
+    output = FSM.runFST([uk_fsa], ["w\xc9\xaal"])
     print "==== Result: ", str(output), " ===="
 
-    print "==== Trying British source model on strings 'Stella' ===="
-    output = FSM.runFST([uk_fsa], ["stella"])
+    print "==== Trying British source model on string 'brother' -> 'brʌðə' ===="
+    output = FSM.runFST([uk_fsa], ["brʌðə"])
+    print "==== Result: ", str(output), " ===="
+
+    print "==== Trying British source model on FAKE string 'bbbbbbb' -> 'bbbbbbb' ===="
+    output = FSM.runFST([uk_fsa], ["bbbbbbb"])
     print "==== Result: ", str(output), " ===="
 
     print "\n================================\n"
 
-    print "==== Trying American source model on strings 'please' ===="
-    output = FSM.runFST([usa_fsa], ["please"])
-    print "==== Result: ", str(output), " ===="
 
-    print "==== Trying American source model on strings 'call' ===="
-    output = FSM.runFST([usa_fsa], ["call"])
-    print "==== Result: ", str(output), " ===="
-
-    print "==== Trying American source model on strings 'Stella' ===="
-    output = FSM.runFST([usa_fsa], ["stella"])
-    print "==== Result: ", str(output), " ===="
-
-    preTrainOutput = FSM.runFST([uk_fsa], british, quiet=True)
-    for i in range(len(preTrainOutput)):
-        if len(preTrainOutput[i]) == 0:
-            preTrainOutput[i] = words[i]
-        else:
-            preTrainOutput[i] = preTrainOutput[i][0]
-    preTrainEval = evaluate(british, preTrainOutput)
-    print 'before training, P/R/F = ', str(preTrainEval)
+    # preTrainOutput = FSM.runFST([uk_fsa], british, quiet=True)
+    # for i in range(len(preTrainOutput)):
+    #     if len(preTrainOutput[i]) == 0:
+    #         preTrainOutput[i] = words[i]
+    #     else:
+    #         preTrainOutput[i] = preTrainOutput[i][0]
+    # preTrainEval = evaluate(british, preTrainOutput)
+    # print 'before training, P/R/F = ', str(preTrainEval)
 
     # preTrainOutput = runFST([fsa, fst], wordsDev, quiet=True)
     # for i in range(len(preTrainOutput)):
