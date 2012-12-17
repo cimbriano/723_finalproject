@@ -1,0 +1,100 @@
+\documentclass[11pt, letterpaper, oneside]{article}
+\usepackage{enumerate}
+\usepackage{ calc }
+\usepackage{ amssymb }
+
+\begin{document}
+
+\title{CMSC 723: Final Project \\ Automatically Distinguishing American and British English}
+\author{Christopher Imbriano, David Wasser}
+
+\maketitle
+
+%Proposal Questions:
+%* what problem are you tackling
+%* why is it important/interesting
+%* what is your basic approach
+%* where will you get data
+%* how will you evaluate success
+%* what you hope to get out of this project
+
+% 4 pages length
+
+% explain why it works (when it does)
+% why it doesn't work (when it doesn't).
+
+% You should also reserve about a page of this writeup to talk about what _didn't_ work and what was harder than you expected it to be (there _will_ be something!).
+\section{Abstract}
+
+NOTE:  Much of this is placeholder from the progress report and uses future tense.  Change to past tense.
+
+\section{Problem}
+Voice control and command recognition is a popular new feature of smartphones. 
+Apple's Siri and Google's Search App are two examples of systems that take voice commands form users and performs actions like searching the web, creating calendar events, or sending message.
+Users had been reporting that these systems have been having trouble understanding them, especially those with British or Southern American accents. 
+Improvements in accent understanding could help systems like these better recognize users with variations in their speech, as well as improve the localization of the voice the system produces.
+
+\section{Introduction}
+
+
+\section{Data Sources}
+	\begin{enumerate}
+		\item CMU Pronunciation Dictionary \\ http://www.speech.cs.cmu.edu/cgi-bin/cmudict
+		
+		"A machine-readable pronunciation dictionary for North American English that contains over 125,000 words and their transcriptions."
+		
+		\item Oxford English Dictionary \\ http://public.oed.com/subscriber-services/sru-service
+		
+		They have a subscriber service which could be used to compile a corpus of words and their British-English pronunciation.
+		
+		\item Speech Accent Archive \\ http://accent.gmu.edu
+		
+		"The speech accent archive uniformly presents a large set of speech samples from a variety of language backgrounds. 
+		Native and non-native speakers of English read the same paragraph and are carefully transcribed. "
+	\end{enumerate}
+
+\section{ Method }
+Using a corpus of words for which we have both the American and British phonetic transcription, we will build a Probabilistic Finite State Acceptor.
+We will build a language model over phonemes since we will assume phonetic transcriptions are our input data.
+Once we have these two language models, one for each dialect, we can feed it phonetic transcriptions and receive a probability of that transcription in each of British and American English.
+The distinguisher will produce a judgment based on the more probable dialect.
+
+
+\section{ Results }
+
+	\subsection{ Evaluation Method }
+	This paragraph is from the progress report - needs updating.
+	
+	The Speech Accent Archive, produced by researchers at George Mason University, it a large data set of speakers of various languages speaking a sentence as well as the phonetic transcription of their speech.
+	Included in the set of speakers are individuals from USA and the UK.
+	We will use these two subsets as ground truth. So given the transcribed speech of speakers in those sets, we expect that our distinguisher should correctly identify each speaker's native dialect.
+	Evaluation will then be a percentage of speakers correctly identified.
+	
+
+	
+
+\section{Complications}
+
+\begin{itemize}
+\item Character sets in general.
+	SAA raw data used unicode decimals
+\item Phonetic granularity
+	Stress
+	Diacritics
+	List the character mappings and the excluded characters
+\item Disparate data sources for testing and model building
+	OED - "Proper" pronunciations
+	SAA - Real human speech with lots of variability
+
+\end{itemize}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{9}
+%	\bibitem{sads} Elaine Shi, Charalampos Papamanthou \emph{Streaming Authenticated Data Structures}, Date Unknown
+\end{thebibliography}
+
+\end{document}
