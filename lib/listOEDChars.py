@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 output = []
-for line in open('../data/oed.txt').readlines():
+for line in open('data/oedclean.txt').readlines():
     words = line.split(':')
     if len(words) > 1:
         for l in words[1:]:
@@ -30,5 +30,5 @@ for line in open('../data/oed.txt').readlines():
                         add += 1
                 output.append(l[i:i+count+1])
                 i += add
-outfile = open('../data/oedChars.txt', 'w')
+outfile = open('data/oedChars.txt', 'w')
 outfile.write(''.join(set(output)))

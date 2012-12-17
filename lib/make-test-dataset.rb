@@ -30,12 +30,12 @@ Dir.foreach(rel_path) { |filename|
 			while( line = infile.gets)
 				transcription_filename_base, gender, location, country = line.split('^').map { |e| e.strip }
 				transcription = ""
-				puts "country: '#{country}'"
-				puts "filename: #{transcription_filename_base}"
+				# puts "country: '#{country}'"
+				# puts "filename: #{transcription_filename_base}"
 
 
 				if country == "uk" or country == "usa"
-					puts "country: '#{country}'"
+					# puts "country: '#{country}'"
 
 					if length_matching.include?(transcription_filename_base)
 						begin

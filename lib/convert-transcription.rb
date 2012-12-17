@@ -63,7 +63,7 @@ def convert_char(char)
 		# puts "hex_string: #{hex_string} is string?: #{hex_string.class}"
 		converted_char = [hex_string.hex].pack("U")
 
-		puts "cleaning up: #{converted_char}  result: '#{cleanup(converted_char)}'"
+		# puts "cleaning up: #{converted_char}  result: '#{cleanup(converted_char)}'"
 
 		return cleanup(converted_char)
 	end
@@ -71,9 +71,18 @@ def convert_char(char)
 end
 
 def cleanup(pre)
-	diacritics = ["ˠ", "̆", "̥", "̊", "̬", "ʰ", "̹", "̜", "̟", "̠", "̈", "̽", "̩", "̯", "˞", "̤", "̰", "̼", "ɣ", "ʕ", "̴", "̝", "̞", "̘", "̙", "̪", "̺", "̻", "̃", "̚"]
+
+	# diacritics = ["ˠ", "̆", "̥", "̊", "̬", "ʰ", "̹", "̜", "̟", "̠", "̈", "̽", "̩", "̯", "˞", "̤", "̰", "̼", "ɣ", "ʕ", "̴", "̝", "̞", "̘", "̙", "̪", "̺", "̻", "̃", "̚", "˺"]
+	diacritics = ["ˠ", "̆", "̥", "̊", "̬", "ʰ", "̹", "̜", "̟", "̠", "̈", "̽", "̩", "̯", "˞", "̤", "̰", "̼", "ɣ", "ʕ", "̴", "̝", "̞", "̘", "̙", "̪", "̺", "̻", "̚", "˺", "ˀ", "ʷ"]
+
 	character_mapping = {	"ɝ" => "ɜ", 
-							"ɚ" => "ə"}
+							"ɚ" => "ə",
+							"ʧ"	=> "tʃ",
+							"ʈ" => "t",
+							"β" => "b",
+							"ɐ" => "æ",
+							"ɵ" => "d",
+							"ɹ" => "r"}
 
 	word = ""
 

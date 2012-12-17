@@ -19,6 +19,7 @@ begin
 		transcription.gsub!("]",  "")
 		transcription.gsub!("\"", "")
 		transcription.gsub!(" ",  "")
+		transcription.gsub!(",",  "")
 
 		transcription.each_char do |c|			
 			if !chars.include?(c)
