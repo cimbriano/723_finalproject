@@ -53,6 +53,7 @@ Dir.foreach(rel_path) { |filename|
 							if transcription
 								transcription = transcription[1...-1]
 								transcribed_word_list = split(transcription)
+								
 								transcribed_word_list.map! {|word| convert(word) }
 
 								# puts "Converted transcribed words: #{transcribed_word_list[0..10]} ..."

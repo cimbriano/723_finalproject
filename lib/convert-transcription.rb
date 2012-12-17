@@ -61,7 +61,29 @@ def convert_char(char)
 		# puts "decimal: #{unicode_decimal}"
 		hex_string = "%.4x" % unicode_decimal
 		# puts "hex_string: #{hex_string} is string?: #{hex_string.class}"
-		return [hex_string.hex].pack("U")
+		converted_char = [hex_string.hex].pack("U")
+
+		puts "cleaning up: #{converted_char}  result: '#{cleanup(converted_char)}'"
+
+		return cleanup(converted_char)
 	end
 		
 end
+
+def cleanup(pre)
+	diacritics = ["̆", "̥", "̊", "̬", "ʰ", "̹", "̜", "̟", "̠", "̈", "̽", "̩", "̯", "˞", "̤", "̰", "̼", "ɣ", "ʕ", "̴", "̝", "̞", "̘", "̙", "̪", "̺", "̻", "̃", "̚"]
+	character_mapping = {"ɝ" => "ɜ"}
+
+	word = ""
+
+	pre.each_char do |c|
+
+		if !diacritics.include?(c)
+			word += (character_mapping[c] || c)
+		end
+	end
+
+	return word
+end
+
+
