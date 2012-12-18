@@ -163,7 +163,7 @@ def writeStringFile(filename, strings):
     h.close()
 
 
-def runFST(fstList, strings, maxNumPaths=1, randomPaths=False, quiet=False):
+def runFST(fstList, strings, maxNumPaths=1, randomPaths=False, quiet=False, outfile='.tmp.output'):
     cmd = carmelPath + ' -rIQE'
     if randomPaths:
         if len(strings) > 1:
@@ -176,7 +176,7 @@ def runFST(fstList, strings, maxNumPaths=1, randomPaths=False, quiet=False):
         fstList[i].writeToFile(".tmp.fst." + str(i))
         cmd = cmd + ' .tmp.fst.' + str(i)
     writeStringFile('.tmp.fst.strings', strings)
-    cmd = cmd + ' .tmp.fst.strings > .tmp.output'
+    cmd = cmd + ' .tmp.fst.strings > ' + outfile
     print "executing: ", cmd
     if quiet:
         cmd = "( " + cmd + " ) > /dev/null 2>&1"
@@ -185,7 +185,7 @@ def runFST(fstList, strings, maxNumPaths=1, randomPaths=False, quiet=False):
         raise Exception("execution of carmel failed!  return value=" + str(p))
 
     outputs = []
-    h = open('.tmp.output', 'r')
+    h = open(outfile, 'r')
     for i in range(len(strings)):
         this = []
         for j in range(maxNumPaths):
