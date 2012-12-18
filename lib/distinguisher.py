@@ -29,6 +29,13 @@ def readData(filename):
     return (words, british, american)
 
 
+def testFileLines(filename="data/test/usa_uk.txt"):
+    h = open(filename, 'r')
+    for l in h.readlines():
+        a = l.split('^')
+        yield(a[0], a[1], a[2], a[3], a[4])
+
+
 def evaluate(truth, hypothesis):
     I = 0
     T = 0
@@ -112,6 +119,24 @@ def bigramSourceModel(segmentations):
     return fsa
 
 
+def compare_results(usa_file="tmp.usa.output", uk_file="tmp.uk.output"):
+    us = open(usa_file, 'r')
+    uk = open(uk_file, 'r')
+
+    score = 0
+
+    for us_line in us.readlines():
+        us_score = float(us_line.split()[-1])
+        uk_score = float(uk.readline().strip().split()[-1])
+
+        if us_score > uk_score:
+            score += 1
+        else:
+            score -= 1
+
+    return score
+
+
 def runTest(trainFile='bengali.train', devFile='OEDResultsUniqClean.txt', source=bigramSourceModel):
     # def runTest(trainFile='bengali.train', devFile='OEDResultsUniq.txt', channel=stupidChannelModel, source=stupidSourceModel):
     path_to_data = "data/speech_accent_archive/"
@@ -120,29 +145,53 @@ def runTest(trainFile='bengali.train', devFile='OEDResultsUniqClean.txt', source
     # (wordsDev, segsDev) = readData(devFile)
     # fst = channel(words, segs)
     uk_fsa = source(british)
-    # usa_fsa = source(american)
+    usa_fsa = source(american)
 
     # uk_output = FSM.runFST([uk_fsa], british, quiet=False)
     # usa_output = FSM.runFST([usa_fsa], american, quiet=False)
 
-    print "==== Trying British source model on string 'meet' -> 'mi\xcb\x90t' ===="
-    output = FSM.runFST([uk_fsa], ["mi\xcb\x90t"])
-    print "==== Result: ", str(output), " ===="
+    # print "==== Trying American source model on strings ===="
+    # output = FSM.runFST([usa_fsa], ["treɪn", "steɪʃən", "meɪbi", "bbbbbbb"], outfile="tmp.test.output")
+    # print "==== Result: ", str(output), " ===="
 
-    print "==== Trying British source model on string 'will' -> 'w\xc9\xaal' ===="
-    output = FSM.runFST([uk_fsa], ["w\xc9\xaal"])
-    print "==== Result: ", str(output), " ===="
+    correct = 0
+    total = 0
 
-    print "==== Trying British source model on string 'brother' -> 'brʌðə' ===="
-    output = FSM.runFST([uk_fsa], ["brʌðə"])
-    print "==== Result: ", str(output), " ===="
+    for country, src, loc, gender, trans in testFileLines():
+        total += 1
+        words = trans.split(',')
+        FSM.runFST([usa_fsa], words, outfile="tmp.usa.output")
+        FSM.runFST([uk_fsa], words, outfile="tmp.uk.output")
 
-    print "==== Trying British source model on FAKE string 'bbbbbbb' -> 'bbbbbbb' ===="
-    output = FSM.runFST([uk_fsa], ["bbbbbbb"])
-    print "==== Result: ", str(output), " ===="
+        result = compare_results("tmp.usa.output", "tmp.uk.output")
 
-    print "\n================================\n"
+        if result > 0 and country == "usa":
+            correct += 1
+        elif result < 0 and country == "uk":
+            correct += 1
+        else:
+            print "Got one wrong.  Misabeled " + src
 
+    print "Summary:\n"
+    print "Got " + str(correct) + " correct for an accuracy of " + str(100.0 * correct / total) + "%"
+
+    # print "==== Trying British source model on string 'meet' -> 'mi\xcb\x90t' ===="
+    # output = FSM.runFST([uk_fsa], ["mi\xcb\x90t"])
+    # print "==== Result: ", str(output), " ===="
+
+    # print "==== Trying British source model on string 'will' -> 'w\xc9\xaal' ===="
+    # output = FSM.runFST([uk_fsa], ["w\xc9\xaal"])
+    # print "==== Result: ", str(output), " ===="
+
+    # print "==== Trying British source model on string 'brother' -> 'brʌðə' ===="
+    # output = FSM.runFST([uk_fsa], ["brʌðə"])
+    # print "==== Result: ", str(output), " ===="
+
+    # print "==== Trying British source model on FAKE string 'bbbbbbb' -> 'bbbbbbb' ===="
+    # output = FSM.runFST([uk_fsa], ["bbbbbbb"])
+    # print "==== Result: ", str(output), " ===="
+
+    # print "\n================================\n"
 
     # preTrainOutput = FSM.runFST([uk_fsa], british, quiet=True)
     # for i in range(len(preTrainOutput)):
