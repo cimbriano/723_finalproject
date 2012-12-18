@@ -1,5 +1,5 @@
 # FSM temp files
-.tmp*
+.tmp.*
 
 # Sublime Text 2
 *.sublime-project
