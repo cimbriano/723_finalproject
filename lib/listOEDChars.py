@@ -22,13 +22,13 @@ for line in open('data/oedclean.txt').readlines():
                     count = 0
                 add = 1
                 for j in range(count):
-                    if not ord(l[i+j+1]) >> 6 == 2:
+                    if not ord(l[i + j + 1]) >> 6 == 2:
                         add += 1
-                        count = j+1
+                        count = j + 1
                         break
                     else:
                         add += 1
-                output.append(l[i:i+count+1])
+                output.append(l[i:i + count + 1])
                 i += add
 outfile = open('data/oedChars.txt', 'w')
 outfile.write(''.join(set(output)))
