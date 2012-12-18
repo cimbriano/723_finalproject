@@ -67,17 +67,26 @@ Dir.foreach(rel_path) { |filename|
 									puts "LENGTH DID NOT MATCH: #{transcription_filename_base}. Country: #{country}"
 								end
 
+								file = nil
+
 								case country
 								when "usa"
 									# puts "USA"
-									usa_uk_trans_file.puts "usa^#{transcription_filename_base}^#{location}^#{gender}^#{transcribed_word_list}"
+									file = usa_uk_trans_file
+									# usa_uk_trans_file.puts "usa^#{transcription_filename_base}^#{location}^#{gender}^#{transcribed_word_list}"
 								when "uk"
 									# puts "UK"
-									usa_uk_trans_file.puts "uk^#{transcription_filename_base}^#{transcribed_word_list}"
+									file = usa_uk_trans_file
+									# usa_uk_trans_file.puts "uk^#{transcription_filename_base}^#{location}^#{gender}^#{transcribed_word_list}"
 								else
 									# puts "OTHER"
-									other_trans_file.puts "#{country}^#{transcription_filename_base}^#{transcribed_word_list}"
+									file = other_trans_file
+									# other_trans_file.puts "#{country}^#{transcription_filename_base}^#{location}^#{gender}^#{transcribed_word_list}"
 								end
+
+								file.print "#{country}^#{transcription_filename_base}^#{location}^#{gender}^"
+								file.print transcribed_word_list.join(',')
+								file.print "\n"
 
 							else
 								# puts "No transcription found in: #{transcription_filename_base}"
