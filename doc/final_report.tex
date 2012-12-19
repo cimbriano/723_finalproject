@@ -2,6 +2,7 @@
 \usepackage{enumerate}
 \usepackage{ calc }
 \usepackage{ amssymb }
+\usepackage{ tipa }
 
 \begin{document}
 
@@ -23,26 +24,28 @@
 % explain why it works (when it does)
 % why it doesn't work (when it doesn't).
 
-% You should also reserve about a page of this writeup to talk about what _didn't_ work and what was harder than you expected it to be (there _will_ be something!).
-\section{Abstract}
-
-NOTE:  Much of this is placeholder from the progress report and uses future tense.  Change to past tense.
+%\section{Abstract}
+%
+%NOTE:  Much of this is placeholder from the progress report and uses future tense.  Change to past tense.
 
 \section{Problem}
-Voice control and command recognition is a popular new feature of smartphones. 
-Apple's Siri and Google's Search App are two examples of systems that take voice commands form users and performs actions like searching the web, creating calendar events, or sending messages.
-Users had been reporting that these systems have been having trouble understanding them, especially those with British or Southern American accents. 
-Improvements in accent understanding could help systems like these better recognize users with variations in their speech, as well as improve the localization of the voice the system produces.
+	Voice control and command recognition is a popular new feature of smartphones. 
+	Apple's Siri and Google's Search App are two examples of systems that take voice commands form users and performs actions like searching the web, creating calendar events, or sending messages.
+	Users have been reporting that these systems have trouble understanding them, especially those with British or Southern American accents. 
+	Improvements in accent understanding could help systems like these better recognize users with variations in their speech, as well as improve the localization of the voice the system produces.
+	We set out to tackle a portion of this problem, that being understanding spoken dialects of well-known languages by attempting to make a distinguisher between American and British English.
 
-\section{Introduction}
-
+	To solve the bigger problem of understanding dialects, we would need a system that did the following:
+	
+	\begin{enumerate}
+		\item Convert spoken word into digital representation
+		\item Transcribed the digital representation into text or phonetics
+		\item Interpret phonetic transcriptions to be some known dialect using language models
+	\end{enumerate}
+	This project was an attempt at the third part of this pipeline. 
 
 \section{Data Sources}
-	\begin{enumerate}
-		\item CMU Pronunciation Dictionary \\ http://www.speech.cs.cmu.edu/cgi-bin/cmudict
-		
-		"A machine-readable pronunciation dictionary for North American English that contains over 125,000 words and their transcriptions."
-		
+	\begin{enumerate}		
 		\item Oxford English Dictionary \\ http://public.oed.com/subscriber-services/sru-service
 		
 		They have a subscriber service which could be used to compile a corpus of words and their British-English pronunciation.
@@ -51,18 +54,26 @@ Improvements in accent understanding could help systems like these better recogn
 		
 		"The speech accent archive uniformly presents a large set of speech samples from a variety of language backgrounds. 
 		Native and non-native speakers of English read the same paragraph and are carefully transcribed. "
+		
+		\item Not used: CMU Pronunciation Dictionary \\ http://www.speech.cs.cmu.edu/cgi-bin/cmudict
+		
+		"A machine-readable pronunciation dictionary for North American English that contains over 125,000 words and their transcriptions."
+		
+		This source was not used because it would have required translating a third transcription character set and the approach we decided to pursue didn't require another data source. 
+		
 	\end{enumerate}
 
-\section{ Method }
-Using a corpus of words for which we have both the American and British phonetic transcription, we will build a Probabilistic Finite State Acceptor.
-We will build a language model over phonemes since we will assume phonetic transcriptions are our input data.
-Once we have these two language models, one for each dialect, we can feed it phonetic transcriptions and receive a probability of that transcription in each of British and American English.
-The distinguisher will produce a judgment based on the more probable dialect.
+\section{ Approach }
+	Using a corpus of words for which we have both the American and British phonetic transcription, we built a Probabilistic Finite State Acceptor to serve as a language model for each dialect.
+	We used a bigram language model over phonemes since our assumption was that phonetic transcriptions would be input to our distinguisher, and pragmatically, we could use some of the Project 1 infrastructure and leverage our experience with the Carmel Finite State Machine.
+	Once we have these two language models, we can fed it phonetic transcriptions of a spoken paragraph.
+	The Carmel library outputs a probability for each word in the paragraph for both language models.
+	Then a judgement is reached by comparing the number of words determined to be British versus American English, that is, for a given transcription which language model gave the word a higher probability.
 
 
-\section{ Results }
+\section{ Evaluation }
 
-	\subsection{ Evaluation Method }
+	\subsection{ Method }
 	This paragraph is from the progress report - needs updating.
 	
 	The Speech Accent Archive, produced by researchers at George Mason University, it a large data set of speakers of various languages speaking a sentence as well as the phonetic transcription of their speech.
@@ -70,49 +81,60 @@ The distinguisher will produce a judgment based on the more probable dialect.
 	We will use these two subsets as ground truth. So given the transcribed speech of speakers in those sets, we expect that our distinguisher should correctly identify each speaker's native dialect.
 	Evaluation will then be a percentage of speakers correctly identified.
 	
-
+	\subsection{ Results }
+	
+	
 	
 
 \section{Complications}
+	
+	\subsection{Character Sets}
+	    A number of problems arose from parsing the character sets used by the different data sources.
+	    The Speech Accent Archive was in the Rich Text Format using unicode characters to encode the phonetic symbols.
+	    The unicode characters were encoded in the format: \textbackslash u\#\#\# where the \# represents decimal digits.
+	    To deal with this, we read in the decimal digits and converted them to the appropriate unicode characters that were represented and stored them in UTF-8.
+	    The Oxford English Dictionary on the other hand encoded the unicode phonetic symbols using UTF-8.
+	    This caused problems initially when we treated the data as single-byte characters in the scripts preparing the data.
+	    We now treat the Oxford English Dictionary data as multi-byte characters when copying individual characters, and as single-byte characters otherwise.
+	    In our Finite State Acceptor implementation, all characters are treated as single-byte characters, which should result in equivalent probabilities overall as if interpreted as multi-byte characters.
+	
+	\subsection{Phonetic Granularity}
+	    More problems arose from differences in the specificity of the transcriptions between different datasets.
+	    The Oxford English Dictionary encoded primary and secondary stresses in the words, while the Speech Accent Archive did not encode any stresses in the words.
+	    To deal with this, we removed all stresses from the data taken from the Oxford English Dictionary.
+	    Another issue came from the use of �\textipa{tS} in the Speech Accent Archive as one character while it was represented with two separate unicode characters in the Oxford English Dictionary (using \textipa{t} and \textipa{S}).
+	    To fix this, we changed the Speech Accent Archive data to separate the single character into two characters.
+	    
+	    A number of characters also only appeared in one of the two datasets.
+	    Most of the characters that appeared only in the Oxford English Dictionary were only in uncommon words originating from other languages such as the character y appearing in Saumur \slash somyr\slash, a French word.
+	    Many of the characters in the Speech Accent Archive that did not appear in the Oxford English Dictionary resulted from a narrower transcription of the spoken sounds than in the Oxford English Dictionary such as the use of \textipa{R} in the transcription of the word butter.
+	    To deal with these, we translated them in the data to similar characters used in the Oxford English Dictionary.
 
-\begin{itemize}
-\item Character sets
-    A number of problems arose from parsing the character sets used by the different data sources.
-    The Speech Accent Archive was in the Rich Text Format using unicode characters to encode the phonetic symbols.
-    The unicode characters were encoded in the format: \textbackslash u### where the # represents decimal digits.
-    To deal with this, we read in the decimal digits and converted them to the appropriate unicode characters that were represented and stored them in UTF-8.
-    The Oxford English Dictionary on the other hand encoded the unicode phonetic symbols using UTF-8.
-    This caused problems initially when we treated the data as single-byte characters in the scripts preparing the data.
-    We now treat the Oxford English Dictionary data as multi-byte characters when copying individual characters, and as single-byte characters otherwise.
-    In our Finite State Acceptor implementation, all characters are treated as single-byte characters, which should result in equivalent probabilities overall as if interpreted as multi-byte characters.
-
-\item Phonetic Granularity
-    More problems arose from differences in the specificity of the transcriptions between different datasets.
-    The Oxford English Dictionary encoded primary and secondary stresses in the words, while the Speech Accent Archive did not encode any stresses in the words.
-    To deal with this, we removed all stresses from the data taken from the Oxford English Dictionary.
-    Another issue came from the use of ʧ in the Speech Accent Archive as one character while it was represented with two separate unicode characters in the Oxford English Dictionary (using t and ʃ).
-    To fix this, we changed the Speech Accent Archive data to separate the single character into two characters.
-    A number of characters also only appeared in one of the two datasets.
-    Most of the characters that appeared only in the Oxford English Dictionary were only in uncommon words originating from other languages such as the character y appearing in Saumur, a French word.
-    Many of the characters in the Speech Accent Archive that did not appear in the Oxford English Dictionary resulted from a narrower transcription of the spoken sounds than in the Oxford English Dictionary such as the use of ɾ in the transcription of the word butter.
-    To deal with these, we translated them in the data to similar characters used in the Oxford English Dictionary.
-
-\item Disparate data sources for testing and model building
-    We think that a large part of the innacuracy of the model stems from the differences between the Oxford English Dictionary pronunciations and the Speech Accent Archive pronunciations.
-    The Oxford English Dictionary uses the "proper" pronunciations, which assumes that there is one single correct way to pronounce words in British and American English.
-    This is generally regarded by linguists to not be true and is not the case in the Speech Accent Archive transcriptions.
-    The Speech Accent Archive transcriptions are transcribed the way people actually spoke the words instead of in the "proper" manner.
-    As a result, the transcriptions, particularly of the American speakers, generally differ from what the Oxford English Dictionary describes as how to pronounce different words.
-
-\end{itemize}
+	\subsection{Disparate data sources for testing and model building}
+	    We think that a large part of the inaccuracy of the model stems from the differences between the Oxford English Dictionary pronunciations and the Speech Accent Archive pronunciations.
+	    The Oxford English Dictionary uses the "proper" pronunciations, which assumes that there is one single correct way to pronounce words in British and American English.
+	    This is generally regarded by linguists to not be true and is not the case in the Speech Accent Archive transcriptions.
+	    The Speech Accent Archive transcriptions are transcribed the way people actually spoke the words instead of in the "proper" manner.
+	    As a result, the transcriptions, particularly of the American speakers, generally differ from what the Oxford English Dictionary describes as how to pronounce different words.
 
 
+\section{Future Work}
 
+	Given the opportunity to continue working on this project, we have another approach that we would try.
+	Instead of using the OED transcriptions to build both the American and British language model, we could have used the CMU Dictionary as the data source for the American English model.
+	In this scenario, we'd have to translate the ARPAbet, the transcription alphabet used by the CMU dictionary into the character set used by the OED, which shouldn't be too difficult given that there are only 39 phonemes in the ARPAbet.
+	To evaluate, we could select a subset of words from both the CMU dictionary and the OED and have the language models pick the more probable dialect.
+	
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{thebibliography}{9}
 %	\bibitem{sads} Elaine Shi, Charalampos Papamanthou \emph{Streaming Authenticated Data Structures}, Date Unknown
+	\bibitem Carmel Library
+	\bibitem SAA
+	\bibitem OED
+	\bibitem CMU Dictionary
+	\bibitem Hal's Project 1 code?
 \end{thebibliography}
 
 \end{document}
