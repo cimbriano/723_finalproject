@@ -15,8 +15,8 @@ def readData(filename):
         a = l.split(':')
         if len(a) == 1:
             words.append(a[0].strip())
-            british.append(None)
-            american.append(None)
+            # british.append(None)
+            # american.append(None)
         elif len(a) == 2:
             # One transcription means its the same for both
             words.append(a[0].strip())
@@ -95,9 +95,6 @@ def bigramSourceModel(segmentations):
         for c in vocab.iterkeys():
             lm[prev][c] = lm[prev][c] + 0.5   # add 0.5 smoothing
         lm[prev].normalize()
-
-    print "Language Model keys"
-    print lm['b'].keys()
 
     # convert to a FSA
     fsa = FSM.FSM(isProbabilistic=True)
