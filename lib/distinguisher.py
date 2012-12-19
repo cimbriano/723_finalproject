@@ -132,7 +132,7 @@ def compare_results(usa_file=".tmp.usa.output", uk_file=".tmp.uk.output"):
 
         if us_score > uk_score:
             score += 1
-        else:
+        elif us_score < uk_score:
             score -= 1
 
         # print "Running Score: " + str(score)
