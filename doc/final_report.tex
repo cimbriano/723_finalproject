@@ -74,10 +74,17 @@
 \section{ Evaluation }
 
 	\subsection{ Method }
-	The Speech Accent Archive, produced by researchers at George Mason University, it a large data set of speakers of various languages speaking a short paragraph along with a phonetic transcription of their speech.
-	Included in the set of speakers are individuals from USA and the UK.
-	We will use these two subsets as ground truth. So given the transcribed speech of speakers in those sets, we expect that our distinguisher should correctly identify each speaker's native dialect.
-    We will evaluate our distinguisher using the percentage of speakers that were correctly identified by the distinguisher.
+    We used the Speech Accent Archive as our test data set for the distinguisher.
+    The Speech Accent Archive, produced by researchers at George Mason University, is a large data set of speakers of various languages speaking a short paragraph along with a phonetic transcription of their speech.
+    Included in the set of speakers are individuals from USA and the UK.
+    We took a subset of the English speakers from the USA and English speakers from the UK to use as test data.
+    This subset had 9 samples of speakers from the UK and 77 samples of speakers from the USA.
+    We took this test data and fed it into the distinguisher.
+    The distinguisher tried to determine which paragraphs were spoken by American speakers and which were spoken by British speakers.
+    To do this, each word was fed into the Finite State Acceptor for both dialects of English to find the probability that this string was generated from that source.
+    An overall score was increased by one if the word had a higher probability ffor the American source than the British source, and decreased by one if the word had a higher probabilty for the British source.
+    At the end of the paragraph, a positive score meant that the paragraph was more likely American English and a negative score meant that the paragraph was more likely British English.
+    We then found the percentage of paragraphs that the distinguisher outputted the correct source for and used this as our final measure for this evaluation.
 	
 	\subsection{ Results }
 	
