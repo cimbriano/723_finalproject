@@ -74,12 +74,10 @@
 \section{ Evaluation }
 
 	\subsection{ Method }
-	This paragraph is from the progress report - needs updating.
-	
-	The Speech Accent Archive, produced by researchers at George Mason University, it a large data set of speakers of various languages speaking a sentence as well as the phonetic transcription of their speech.
+	The Speech Accent Archive, produced by researchers at George Mason University, it a large data set of speakers of various languages speaking a short paragraph along with a phonetic transcription of their speech.
 	Included in the set of speakers are individuals from USA and the UK.
 	We will use these two subsets as ground truth. So given the transcribed speech of speakers in those sets, we expect that our distinguisher should correctly identify each speaker's native dialect.
-	Evaluation will then be a percentage of speakers correctly identified.
+    We will evaluate our distinguisher using the percentage of speakers that were correctly identified by the distinguisher.
 	
 	\subsection{ Results }
 	
@@ -104,6 +102,7 @@
 	    To deal with this, we removed all stresses from the data taken from the Oxford English Dictionary.
 	    Another issue came from the use of Ê\textipa{tS} in the Speech Accent Archive as one character while it was represented with two separate unicode characters in the Oxford English Dictionary (using \textipa{t} and \textipa{S}).
 	    To fix this, we changed the Speech Accent Archive data to separate the single character into two characters.
+        Similarly, we changed R-colored vowels, which only appeared in the Speech Accent Archive to instead be the vowel followed by an r.
 	    
 	    A number of characters also only appeared in one of the two datasets.
 	    Most of the characters that appeared only in the Oxford English Dictionary were only in uncommon words originating from other languages such as the character y appearing in Saumur \slash somyr\slash, a French word.
