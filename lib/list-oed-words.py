@@ -1,4 +1,9 @@
 #!/usr/bin/python2.7
+
+#This file will crawl the OED webpage to generate a list of all words in the
+#OED online along with the unique identifier used to find their page on the
+#OED online.
+
 import httplib
 import re
 con = httplib.HTTPConnection('www.oed.com')

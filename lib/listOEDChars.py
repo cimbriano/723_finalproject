@@ -1,3 +1,6 @@
+#This file is meant to list all of the characters that appear in the OED data
+#after it has been cleaned.
+
 #!/usr/bin/python2.7
 output = []
 for line in open('data/oedclean.txt').readlines():

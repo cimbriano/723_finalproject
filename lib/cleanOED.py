@@ -1,4 +1,9 @@
 #!/usr/bin/python2.7
+
+#This file is meant to clean up the input data downloaded by the crawler.
+#All () sets are changed to 2 instances of the word, with and without the
+#parenthesis. Then the primary and secondary stress marks are removed.
+
 import itertools
 
 infile = open('data/speech_accent_archive/OEDResultsUniq.txt').readlines()

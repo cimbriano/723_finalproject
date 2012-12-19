@@ -1,4 +1,11 @@
 #!/usr/bin/python2.7
+
+#This file is meant to crawl the OED webpage for all words given in 
+#data/oed-wordlists.txt in the format <word>:<unique_id>. It randomly orders
+#the words and then with 3 threads, crawls through every word in the wordlist.
+#In case the script is stopped while running, when restarted, it will continue
+#only with words that have not already been downloaded from the OED.
+
 import itertools
 import Queue
 import random
@@ -49,6 +56,9 @@ def find_pronunciation(page):
 if __name__ == "__main__":
     with open('../data/oed-wordlist.txt', 'r') as dict_file:
         dic = [line.strip().split(':') for line in dict_file.readlines()]
+    with open('../data/oed.txt', 'r') as old_words:
+        old = {line.strip().split(':')[0] for line in old_words.readlines()}
+    dic[:] = [x for x in dic if not x[0] in old]
     length = len(dic)
     thread_len = length/THREAD_COUNT
     dic = random.sample(dic, length)
