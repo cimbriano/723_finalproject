@@ -81,9 +81,53 @@
 	
 	\subsection{ Results }
 	
+	Our distinguisher does not work well.
+	We only have one test data set consisting of 86 examples of a transcribed paragraph - 77 speakers of American origin and 9 speakers of British origin.
+	Our distinguisher consistently gets about 10\% accuracy on this dataset, which is exactly the number of British examples.
+	In other words, the distinguisher is very biased towards British and thus attempts to label all examples as British.
+	The low accuracy is an artifact of the skewed distribution of British versus American samples.
+	Thus given more test data sets with a roughly even distribution of British versus American, we'd expect to do no better or worse than chance.
+	We would have found an 89.5\% accuracy achieved by determining all samples to be American English just as bad.
 	
-	
-
+	The reason for the strong bias towards British hasn't been solidly identified, but we have indications of what might be the cause.
+	The language models for both dialects were produced from transcriptions obtained from the Oxford English Dictionary.
+	This is not to suggest that the OED is biased towards their mother tongue, but it may be the case that British speakers produce phonetics closer to the "accepted standard" the OED subscribes to.
+	 Furthermore, perhaps it is the case that American English speakers have a wider variety of pronunciations, further from the standard.
+	 If these two effects were present, British pronunciations would be closer to the language model produces and American pronunciations, farther.
+	 
+	 Another possible cause for error could be the character normalization we had to perform such that the two language models and the test data all transcribed using the same set of characters.
+	 The most significant changes were removing diacritical characters from the Speech Accent Archive data (SAA), mapping SAA-only characters to OED characters and removing stress markers from OED data.
+	 The reasoning behind this was that stress and diacritical characters augment the phonemes rather than change them significantly, so for example where a word begins with a stress like mother (brit.) \slash\textipa{"m2D@}\slash we simply dropped the stress character to make \slash\textipa{m2D@}\slash.
+	 While this change seems reasonable, perhaps the following character mappings made American English speech appear more British:
+	 
+	 \begin{table}[h]
+	 \centering
+	 	\begin{tabular}{c | c}
+		SAA-only & to OED Mapping\\ \hline
+		
+		\textrhookrevepsilon & \textipa{3r} \\
+		\textrhookschwa & \textipa{@r} \\
+		\textteshlig & \textipa{tS} \\
+		\textipa{\:t} & \textipa{t} \\
+		\textipa{B} & \textipa{b} \\
+		\textturna & \textipa{¾} \\
+		\textipa{?} & \textipa{d} \\
+		\textipa{?} & \textipa{r} \\
+		\textipa{?} & \textipa{d} \\
+		\textipa{?} & \textipa{t} \\
+		\textipa{?} & \textipa{?} \\
+		\textipa{?} & \textipa{r} \\
+		\textipa{?} & \textipa{?} \\
+		\textipa{?} & \textipa{?} \\
+		\textipa{?} & \textipa{i?} \\
+		\textipa{?} & \textipa{u?} \\
+		
+		
+		\end{tabular}
+	 \caption{Mapping from SAA-only character to OED "equivalent"}
+	 \label{tab:mapping}
+	 \end{table}
+	 
 \section{Complications}
 	
 	\subsection{Character Sets}
