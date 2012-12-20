@@ -33,43 +33,40 @@
 
 \section{Problem}
 	Voice control and command recognition is a popular new feature of smartphones. 
-	Apple's Siri and Google's Search App are two examples of systems that take voice commands form users and performs actions like searching the web, creating calendar events, or sending messages.
+	Apple's Siri and Google's Search App are two examples of systems that take voice commands from users and perform actions like searching the web, creating calendar events, or sending messages.
 	Users have been reporting that these systems have trouble understanding them, especially those with British or Southern American accents. 
-	Improvements in accent understanding could help systems like these better recognize users with variations in their speech, as well as improve the localization of the voice the system produces.
-	We set out to tackle a portion of this problem, that being understanding spoken dialects of well-known languages by attempting to make a distinguisher between American and British English.
-
-	To solve the bigger problem of understanding dialects, we would need a system that did the following:
+	Improvements in dialect recognition could help systems like Siri better transcribe user commands even with variations in their speech, as well as improve the localization of the voice the system produces in response.
 	
-	\begin{enumerate}
-		\item Convert spoken word into digital representation
-		\item Transcribed the digital representation into text or phonetics
-		\item Interpret phonetic transcriptions to be some known dialect using language models
-	\end{enumerate}
-	This project was an attempt at the third part of this pipeline. 
+	Solving this entire problem is a complicated engineering and computer science challenge.
+	First a system would need to convert speech spoken by individuals into some digital representation.
+	Then the digital representation should be transcribed into either text or phonetics.
+	Then the text or phonetics would need to be both interpreted for dialectal cues as well as symantically parsed to understand the intent behind the command.
+	This project is an attempt to solve just the dialectal portion of the third part of the pipeline. 
+	We sought to construct a system that given a phonetic transcription of speech, could distinguish between British and American English.
 
 \section{Data Sources}
 	\begin{enumerate}		
-		\item Oxford English Dictionary \\ http://public.oed.com/subscriber-services/sru-service
+		\item Oxford English Dictionary \cite{oed} \\ http://public.oed.com/subscriber-services/sru-service
 		
 		They have a subscriber service which could be used to compile a corpus of words and their British-English pronunciation.
 		
-		\item Speech Accent Archive \\ http://accent.gmu.edu
+		\item Speech Accent Archive \cite{saa} \\ http://accent.gmu.edu
 		
 		"The speech accent archive uniformly presents a large set of speech samples from a variety of language backgrounds. 
 		Native and non-native speakers of English read the same paragraph and are carefully transcribed. "
 		
-		\item Not used: CMU Pronunciation Dictionary \\ http://www.speech.cs.cmu.edu/cgi-bin/cmudict
+		\item Not used: CMU Pronunciation Dictionary \cite{cmu} \\ http://www.speech.cs.cmu.edu/cgi-bin/cmudict
 		
 		"A machine-readable pronunciation dictionary for North American English that contains over 125,000 words and their transcriptions."
 		
-		This source was not used because it would have required translating a third transcription character set and the approach we decided to pursue didn't require another data source. 
+		This source was not used because it would have required translating a third transcription character set and the approach we decided to pursue did not require another data source. 
 		
 	\end{enumerate}
 
 \section{ Approach }
 	Using a corpus of words for which we have both the American and British phonetic transcription, we built a Probabilistic Finite State Acceptor to serve as a language model for each dialect.
-    We used a bigram language model over phonemes since our assumption was that phonetic transcriptions would be input to our distinguisher, and pragmatically, we could use some of the Project 1 \cite{hal} infrastructure and leverage our experience with the Carmel Finite State Machine \cite{carmel}.
-	Once we have these two language models, we can fed it phonetic transcriptions of a spoken paragraph.
+    We used a bigram language model over phonemes since our assumption was that phonetic transcriptions would be input to our distinguisher, and pragmatically, we could use some of the CMSC 723 Project 1: Morphological Analysis \cite{hal} infrastructure and leverage our experience with the Carmel Finite State Machine \cite{carmel}.
+	Once we have these two language models, we can feed it phonetic transcriptions of a spoken paragraph.
 	The Carmel library outputs a probability for each word in the paragraph for both language models.
 	Then a judgement is reached by comparing the number of words determined to be British versus American English, that is, for a given transcription which language model gave the word a higher probability.
 
@@ -84,10 +81,9 @@ We used the Speech Accent Archive as our test data set for the distinguisher \ci
     We took this test data and fed it into the distinguisher.
     The distinguisher tried to determine which paragraphs were spoken by American speakers and which were spoken by British speakers.
     To do this, each word was fed into the Finite State Acceptor for both dialects of English to find the probability that this string was generated from that source.
-    An overall score was increased by one if the word had a higher probability ffor the American source than the British source, and decreased by one if the word had a higher probabilty for the British source.
+    An overall score was increased by one if the word had a higher probability for the American source than the British source, and decreased by one if the word had a higher probability for the British source.
     At the end of the paragraph, a positive score meant that the paragraph was more likely American English and a negative score meant that the paragraph was more likely British English.
-    We then found the percentage of paragraphs that the distinguisher outputted the correct source for and used this as our final measure for this evaluation.
-
+    We then found the percentage of paragraphs that the distinguisher correctly identified and used this as our accuracy measure.
 
 \section{Complications}
 	
@@ -105,41 +101,39 @@ We used the Speech Accent Archive as our test data set for the distinguisher \ci
 	    More problems arose from differences in the specificity of the transcriptions between different datasets.
 	    The Oxford English Dictionary encoded primary and secondary stresses in the words, while the Speech Accent Archive did not encode any stresses in the words.
 	    To deal with this, we removed all stresses from the data taken from the Oxford English Dictionary.
-	    Another issue came from the use of Ê\textipa{tS} in the Speech Accent Archive as one character while it was represented with two separate unicode characters in the Oxford English Dictionary (using \textipa{t} and \textipa{S}).
+	    Another issue came from the use of \slash\textteshlig\slash in the Speech Accent Archive as one character while it was represented with two separate unicode characters in the Oxford English Dictionary (using \slash\textipa{t}\slash and \slash\textipa{S}\slash).
 	    To fix this, we changed the Speech Accent Archive data to separate the single character into two characters.
-        Similarly, we changed R-colored vowels, which only appeared in the Speech Accent Archive to instead be the vowel followed by an r.
+        Similarly, we changed R-colored vowels, which only appeared in the Speech Accent Archive to instead be the vowel followed by an \slash r\slash.
 	    
-	    A number of characters also only appeared in one of the two datasets.
+	    Additionally, a number of characters only appeared in one of the two datasets.
 	    Most of the characters that appeared only in the Oxford English Dictionary were only in uncommon words originating from other languages such as the character y appearing in Saumur \slash somyr\slash, a French word.
-	    Many of the characters in the Speech Accent Archive that did not appear in the Oxford English Dictionary resulted from a narrower transcription of the spoken sounds than in the Oxford English Dictionary such as the use of \textipa{R} in the transcription of the word butter.
+	    Many of the characters in the Speech Accent Archive that did not appear in the Oxford English Dictionary resulted from a narrower transcription of the spoken sounds than in the Oxford English Dictionary such as the use of \slash\textipa{R}\slash in the transcription of the word butter.
 	    To deal with these, we translated them in the data to similar characters used in the Oxford English Dictionary.
 
 	\subsection{Disparate data sources for testing and model building}
 	    We think that a large part of the inaccuracy of the model stems from the differences between the Oxford English Dictionary pronunciations and the Speech Accent Archive pronunciations.
 	    The Oxford English Dictionary uses the "proper" pronunciations, which assumes that there is one single correct way to pronounce words in British and American English.
 	    This is generally regarded by linguists to not be true and is not the case in the Speech Accent Archive transcriptions.
-	    The Speech Accent Archive transcriptions are transcribed the way people actually spoke the words instead of in the "proper" manner.
+	    The Speech Accent Archive speech was transcribed the way people actually produced the words instead of in the "proper" manner.
 	    As a result, the transcriptions, particularly of the American speakers, generally differ from what the Oxford English Dictionary describes as how to pronounce different words.
-
-
-
 
 	
 \section{ Results }
 	
 	Our distinguisher does not work well.
 	We only have one test data set consisting of 86 examples of a transcribed paragraph - 77 speakers of American origin and 9 speakers of British origin.
-	Our distinguisher consistently gets about 10\% accuracy on this dataset, which is exactly the number of British examples.
-	In other words, the distinguisher is very biased towards British and thus attempts to label all examples as British.
+	Our distinguisher correctly identifies 11 of 86 example paragraphs scoring about 12.8\% accuracy on this dataset.
+	This corresponds to correctly identifying all British examples and 2 American examples.
+	In other words, the distinguisher is very biased towards British and thus attempts to label nearly all examples as British.
 	The low accuracy is an artifact of the skewed distribution of British versus American samples.
-	Thus given more test data sets with a roughly even distribution of British versus American, we'd expect to do no better or worse than chance.
+	Thus given more test data sets with a roughly even distribution of British versus American, we'd expect to perform no better or worse than chance.
 	We would have found an 89.5\% accuracy achieved by determining all samples to be American English just as bad.
 	
 	The reason for the strong bias towards British hasn't been solidly identified, but we have indications of what might be the cause.
 	The language models for both dialects were produced from transcriptions obtained from the Oxford English Dictionary.
 	This is not to suggest that the OED is biased towards their mother tongue, but it may be the case that British speakers produce phonetics closer to the "accepted standard" the OED subscribes to.
 	 Furthermore, perhaps it is the case that American English speakers have a wider variety of pronunciations, further from the standard.
-	 If these two effects were present, British pronunciations would be closer to the language model produces and American pronunciations, farther.
+	 If either or both of these effects were present, it would lead to higher scores for British pronunciations and lower scores for American pronunciations - both would result in poor performance akin to what were are seeing.
 	 
 	 Another possible cause for error could be the character normalization we had to perform such that the two language models and the test data all transcribed using the same set of characters.
 	 The most significant changes were removing diacritical characters from the Speech Accent Archive data (SAA), mapping SAA-only characters to OED characters and removing stress markers from OED data.
@@ -183,12 +177,11 @@ We used the Speech Accent Archive as our test data set for the distinguisher \ci
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{thebibliography}{9}
-%	\bibitem{sads} Elaine Shi, Charalampos Papamanthou \emph{Streaming Authenticated Data Structures}, Date Unknown
-	\bibitem{carmel} Graehl J. \textit{Carmel Finite-State Toolkit} (Version 6.12) [Computer program]. Retrieved December 18, 2012, from http://www.isi.edu/licensed-sw/carmel/
+	\bibitem{oed} \textit{Oxford English Dictionary} Retrieved December 8, 2012 from http://www.oed.com
     \bibitem{saa} Weinberger, S. (2012, December, 9). \textit{The Speech Accent Archive}. Retrieved December 18, 2012 from http://accent.gmu.edu/index.php
-    \bibitem{oed} \textit{Oxford English Dictionary} Retrieved December 8, 2012 from http://www.oed.com
     \bibitem{cmu} \textit{The CMU Pronouncing Dictionary} Retrieved December 1, 2012 from http://www.speech.cs.cmu.edu/cgi-bin/cmudict
-    \bibitem{hal} Daumé III, H. \textit{CS 723 Project 1: Morphological Disambiguation} [Computer program]. Retrieved December 15, 2012 from http://www.umiacs.umd.edu/~hal/courses/2012F_CL1/p1/
+    \bibitem{hal} Daumé III, H. \textit{CS 723 Project 1: Morphological Disambiguation} [Computer program]. Retrieved December 15, 2012 from http://www.umiacs.umd.edu/~hal/courses/2012F\_CL1/p1/
+    \bibitem{carmel} Graehl J. \textit{Carmel Finite-State Toolkit} (Version 6.12) [Computer program]. Retrieved December 18, 2012, from http://www.isi.edu/licensed-sw/carmel/
 \end{thebibliography}
 
 \end{document}
