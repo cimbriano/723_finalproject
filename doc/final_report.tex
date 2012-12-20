@@ -65,7 +65,7 @@
 
 \section{ Approach }
 	Using a corpus of words for which we have both the American and British phonetic transcription, we built a Probabilistic Finite State Acceptor to serve as a language model for each dialect.
-	We used a bigram language model over phonemes since our assumption was that phonetic transcriptions would be input to our distinguisher, and pragmatically, we could use some of the Project 1 infrastructure and leverage our experience with the Carmel Finite State Machine.
+    We used a bigram language model over phonemes since our assumption was that phonetic transcriptions would be input to our distinguisher, and pragmatically, we could use some of the Project 1 \cite{hal} infrastructure and leverage our experience with the Carmel Finite State Machine \cite{carmel}.
 	Once we have these two language models, we can fed it phonetic transcriptions of a spoken paragraph.
 	The Carmel library outputs a probability for each word in the paragraph for both language models.
 	Then a judgement is reached by comparing the number of words determined to be British versus American English, that is, for a given transcription which language model gave the word a higher probability.
@@ -73,7 +73,7 @@
 
 \section{ Evaluation Method }
 
-    We used the Speech Accent Archive as our test data set for the distinguisher.
+We used the Speech Accent Archive as our test data set for the distinguisher \cite{saa}.
     The Speech Accent Archive, produced by researchers at George Mason University, is a large data set of speakers of various languages speaking a short paragraph along with a phonetic transcription of their speech.
     Included in the set of speakers are individuals from USA and the UK.
     We took a subset of the English speakers from the USA and English speakers from the UK to use as test data.
@@ -93,7 +93,7 @@
 	    The Speech Accent Archive was in the Rich Text Format using unicode characters to encode the phonetic symbols.
 	    The unicode characters were encoded in the format: \textbackslash u\#\#\# where the \# represents decimal digits.
 	    To deal with this, we read in the decimal digits and converted them to the appropriate unicode characters that were represented and stored them in UTF-8.
-	    The Oxford English Dictionary on the other hand encoded the unicode phonetic symbols using UTF-8.
+        The Oxford English Dictionary on the other hand encoded the unicode phonetic symbols using UTF-8 \cite{oed}.
 	    This caused problems initially when we treated the data as single-byte characters in the scripts preparing the data.
 	    We now treat the Oxford English Dictionary data as multi-byte characters when copying individual characters, and as single-byte characters otherwise.
 	    In our Finite State Acceptor implementation, all characters are treated as single-byte characters, which should result in equivalent probabilities overall as if interpreted as multi-byte characters.
@@ -172,7 +172,7 @@
 \section{Future Work}
 
 	Given the opportunity to continue working on this project, we have another approach that we would try.
-	Instead of using the OED transcriptions to build both the American and British language model, we could have used the CMU Dictionary as the data source for the American English model.
+    Instead of using the OED transcriptions to build both the American and British language model, we could have used the CMU Dictionary as the data source for the American English model \cite{cmu}.
 	In this scenario, we'd have to translate the ARPAbet, the transcription alphabet used by the CMU dictionary into the character set used by the OED, which shouldn't be too difficult given that there are only 39 phonemes in the ARPAbet.
 	To evaluate, we could select a subset of words from both the CMU dictionary and the OED and have the language models pick the more probable dialect.
 	
@@ -181,11 +181,11 @@
 
 \begin{thebibliography}{9}
 %	\bibitem{sads} Elaine Shi, Charalampos Papamanthou \emph{Streaming Authenticated Data Structures}, Date Unknown
-	\bibitem{carmel} Carmel Library
-	\bibitem{saa}  SAA
-	\bibitem{oed} OED
-	\bibitem{cmu} CMU Dictionary
-	\bibitem{hal} Hal's Project 1 code?
+	\bibitem{carmel} Graehl J. \textit{Carmel Finite-State Toolkit} (Version 6.12) [Computer program]. Retrieved December 18, 2012, from http://www.isi.edu/licensed-sw/carmel/
+    \bibitem{saa} Weinberger, S. (2012, December, 9). \textit{The Speech Accent Archive}. Retrieved December 18, 2012 from http://accent.gmu.edu/index.php
+    \bibitem{oed} \textit{Oxford English Dictionary} Retrieved December 8, 2012 from http://www.oed.com
+    \bibitem{cmu} \textit{The CMU Pronouncing Dictionary} Retrieved December 1, 2012 from http://www.speech.cs.cmu.edu/cgi-bin/cmudict
+    \bibitem{hal} Daumé III, H. \textit{CS 723 Project 1: Morphological Disambiguation} [Computer program]. Retrieved December 15, 2012 from http://www.umiacs.umd.edu/~hal/courses/2012F_CL1/p1/
 \end{thebibliography}
 
 \end{document}
