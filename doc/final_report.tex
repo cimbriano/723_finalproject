@@ -64,8 +64,8 @@
 	\end{enumerate}
 
 \section{ Approach }
-	Using a corpus of words for which we have both the American and British phonetic transcriptions, we built a Probabilistic Finite State Acceptor to serve as a language model for each dialect.
-    We used a bigram language model over phonemes since our assumption was that phonetic transcriptions would be input to our distinguisher, and pragmatically, we could use some of the CMSC 723 Project 1: Morphological Analysis \cite{hal} infrastructure and leverage our experience with the Carmel Finite State Toolkit \cite{carmel}.
+	Using a corpus of about 173k transcription pairs from the OED, for which there was both an American and British phonetic transcription, we built a Probabilistic Finite State Acceptor to serve as a language model for each dialect.
+    We used a bigram language model over phonemes since our assumption was that phonetic transcriptions would be input to our distinguisher, and pragmatically, we could use some of the CMSC 723 Project 1: Morphological Analysis \cite{hal} infrastructure and leverage our experience with the Carmel Finite State Machine \cite{carmel}.
 	Once we have these two language models, we can feed it phonetic transcriptions of a spoken paragraph.
 	The Carmel library outputs a probability for each word in the paragraph for both language models.
 	Then a judgement is reached by comparing the number of words determined to be British versus American English, that is, for a given transcription which language model gave the word a higher probability.
